@@ -1,6 +1,27 @@
-
+"use client"
+import { useState, useEffect } from 'react';
 
 const Navbar = () => {
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    // Check local storage for theme preference on initial load
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      setDarkMode(true);
+      document.documentElement.classList.add('dark');
+    }
+  }, []);
+  useEffect(() => {
+    // Apply or remove the dark class based on darkMode state
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [darkMode]);
     return (
   
 <nav className="bg-gray-800 border-purple-600 border-b-2">
@@ -30,10 +51,17 @@ const Navbar = () => {
 
         <div className="relative ml-3">
           <div>
-            <button type="button" className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+            <button type="button" className="relative text-white flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
               <span className="absolute -inset-1.5"></span>
               <span className="sr-only">Open user menu</span>
+              Profile
             </button>
+            <button
+        onClick={() => setDarkMode(!darkMode)}
+        className="p-2 bg-gray-300 dark:bg-gray-700 text-black dark:text-white rounded"
+      >
+        Toggle Dark Mode
+      </button>
           </div>
 
         </div>

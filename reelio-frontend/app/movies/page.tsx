@@ -6,10 +6,12 @@ export default function movies() {
    
   
     return (
-      <main>
+      <main className=' dark:bg-black h-screen'>
         <Navigation />
-        <h1 className="text-2xl font-bold">Movies</h1>
-        
+        <h1 className="text-2xl dark:text-white font-bold">Movies</h1>
+        <div>
+          daw
+        </div>
       </main>
   
     

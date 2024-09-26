@@ -12,7 +12,7 @@ export default function movie({ params }: Props) {
    
   
     return (
-      <main>
+      <main className=''>
         
       <h1 className="text-2xl font-bold">Movie Details for ID: {id}</h1>
       </main>
