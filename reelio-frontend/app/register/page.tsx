@@ -45,7 +45,7 @@ const registerPage = () => {
     setLoading(true);
 
     try {
-      const data = await registerUser(formData.username, formData.email, formData.password);
+      await registerUser(formData.username, formData.email, formData.password);
       setSuccess('Registration successful!');
     } catch (error) {
       if (error instanceof Error) {

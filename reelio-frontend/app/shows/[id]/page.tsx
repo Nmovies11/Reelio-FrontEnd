@@ -1,5 +1,5 @@
 "use client"
-import React, { use, useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 import Navigation from "../../Components/Navigation";
 
 interface Show{
@@ -28,7 +28,7 @@ interface Season {
     airDate: string;
   }
 
-export default function show({ params }: Show) {
+export default function Show({ params }: Show) {
 const { id } = params;
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const [showData, setShowData] = useState<any>(null);
