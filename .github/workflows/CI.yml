@@ -1,0 +1,38 @@
+name: CI for Next.js with ESLint
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'  
+
+      - name: Install dependencies
+        run: |
+          npm install  # or yarn install if you're using Yarn
+
+      - name: Run ESLint
+        run: |
+          npm run lint  # Runs the lint script defined in package.json
+        continue-on-error: true 
+
+      - name: Upload lint results as artifacts (optional)
+        uses: actions/upload-artifact@v2
+        with:
+          name: eslint-reports
+          path: eslint-report.json  
