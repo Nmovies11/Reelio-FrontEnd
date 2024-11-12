@@ -24,7 +24,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm install  # or yarn install if you're using Yarn
+          npm install
 
       - name: Run ESLint
         run: |
