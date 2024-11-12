@@ -2,53 +2,69 @@
 import React, {useEffect, useState } from "react";
 import Navigation from "../../Components/Navigation";
 
-interface Show{
-    params: {
-        id: number;
-        title: string;
-        description: string;
-        releaseDate: string;
-        imageUrl: string;
-        backdropUrl: string;
-        director: string;
-    };
+interface Show {
+  id: number;
+  title: string;
+  description: string;
+  releaseDate: string;
+  imageUrl: string;
+  backdropUrl: string;
+  seasons: Season[];  // Added to hold seasons data
 }
 
 interface Season {
-    id: number;
-    name: string;
-    episodeCount: number;
-    releaseDate: string;
-  }
+  id: number;
+  seasonNumber: number;
+  description: string | null;
+  releaseDate: string;
+  episodes: Episode[];  // Added to hold episodes for each season
+}
 
-  interface Episode {
-    id: number;
-    title: string;
-    description: string;
-    airDate: string;
-  }
+interface Episode {
+  id: number;
+  title: string;
+  description: string;
+  releaseDate: string;
+  episodeNumber: number;
+}
 
-export default function Show({ params }: Show) {
-const { id } = params;
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const [showData, setShowData] = useState<any>(null);
-const [seasons, setSeasons] = useState<Season[]>([]);
-const [selectedSeason, setSelectedSeason] = useState<number>(0);
-const [episodes, setEpisodes] = useState<Episode[]>([]);
 
-useEffect(() => {
+export default function Show({ params }: { params: { id: number } }) {
+  const { id } = params;
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+  const [showData, setShowData] = useState<Show | null>(null);
+  const [seasons, setSeasons] = useState<Season[]>([]);
+  const [selectedSeason, setSelectedSeason] = useState<Season | null>(null);
+  const [episodes, setEpisodes] = useState<Episode[]>([]);
+
+  useEffect(() => {
     const fetchShowData = async () => {
-        try {
-            const response = await fetch(`${API_URL}/show/${id}`);
-            const data = await response.json();
-            setShowData(data);
-        } catch (error) {
-            console.error("Error fetching show data:", error);
+      try {
+        const response = await fetch(`${API_URL}/show/${id}`);
+        const data = await response.json();
+        setShowData(data);
+        setSeasons(data.seasons);  // Set the seasons for this show
+        if (data.seasons.length > 0) {
+          setSelectedSeason(data.seasons[0]);  // Optionally select the first season by default
         }
+      } catch (error) {
+        console.error("Error fetching show data:", error);
+      }
     };
 
     fetchShowData();
-}, [id]);
+  }, [id, API_URL]);
+
+  useEffect(() => {
+    if (selectedSeason) {
+      setEpisodes(selectedSeason.episodes);  // Set episodes based on the selected season
+    }
+  }, [selectedSeason]);
+
+  const handleSeasonSelect = (season: Season) => {
+    setSelectedSeason(season);
+  };
 
 return (
     <main className="dark:bg-black bg-white h-screen">
@@ -110,12 +126,13 @@ return (
               <button
                 key={season.id}
                 className={`${
-                  selectedSeason === season.id
+                  selectedSeason?.id === season.id
                     ? "bg-purple-700"
                     : "bg-gray-700 hover:bg-gray-600"
                 } rounded-lg px-4 py-2`}
+                onClick={() => handleSeasonSelect(season)}
               >
-                {season.name}
+                Season {season.seasonNumber}
               </button>
             ))}
           </div>
@@ -128,7 +145,7 @@ return (
                   <li key={episode.id} className="border-b border-gray-700 pb-2">
                     <h4 className="text-lg font-semibold">{episode.title}</h4>
                     <p className="text-sm text-gray-300">
-                      Air Date: {episode.airDate}
+                      Air Date: {episode.releaseDate}
                     </p>
                     <p className="text-gray-400">{episode.description}</p>
                   </li>
