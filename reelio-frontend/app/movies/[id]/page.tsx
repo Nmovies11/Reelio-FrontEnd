@@ -39,7 +39,7 @@ const [movieData, setMovieData] = useState<MovieData | null>(null);
     };
 
     fetchMovieData();
-  }, [id]);
+  }, [API_URL, id]);
 
   return (
     <main className="dark:bg-black bg-white h-screen  ">

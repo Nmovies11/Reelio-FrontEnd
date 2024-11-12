@@ -39,7 +39,7 @@ export default function Movies() {
     };
 
     fetchMovies();
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, [API_URL]);
 
   const sortOptions = [
     { value: 'release_date', label: 'Release Date' },
