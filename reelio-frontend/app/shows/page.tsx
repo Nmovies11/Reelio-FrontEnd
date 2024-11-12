@@ -3,7 +3,6 @@ import React from "react";
 import { useEffect, useState } from "react";
 import Navigation from "../Components/Navigation";
 import ShowCard from "../Components/ShowCard";
-import FilterSidebar from "../Components/FilterSidebar";
 
 export interface Shows {
   id: number;
