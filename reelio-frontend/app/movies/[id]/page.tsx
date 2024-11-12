@@ -120,5 +120,6 @@ const [movieData, setMovieData] = useState<MovieData | null>(null);
       </div>
 </div>
     </main>
+
   );
 }
