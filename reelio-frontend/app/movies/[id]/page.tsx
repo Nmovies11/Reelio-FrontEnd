@@ -2,10 +2,9 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import Navigation from "../../Components/Navigation";
-import CastInfo from "@/app/Components/CastInfo";
 
-interface Movie {
-  params: {
+
+interface MovieData  {
     id: number;
     title: string;
     description: string;
@@ -20,14 +19,13 @@ interface Movie {
       bio: string | null;
       imageUrl: string | null;
     }[];
-  };
 }
 
-export default function movie({ params }: Movie) {
+export default function Movie({ params }: { params: { id: number } }) {
   const { id } = params;
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  const [movieData, setMovieData] = useState<any>(null);
+const [movieData, setMovieData] = useState<MovieData | null>(null);
 
   useEffect(() => {
     const fetchMovieData = async () => {
@@ -108,7 +106,7 @@ export default function movie({ params }: Movie) {
         <div className="p-4 m-4 border-purple-700 border  bg-gray-800 text-white rounded-lg shadow-lg">
     <h2 className="text-2xl dark:text-white font-bold mb-4">Actors & Crew</h2>
     <div className="flex overflow-x-auto space-x-4 p-2">
-    {movieData?.actors.map((actor: any) => (
+    {movieData?.actors.map((actor: MovieData['actors'][0]) => (
       <div key={actor.id} className="flex-shrink-0 hover:text-yellow-500 transition duration-300 text-center">
         <img 
           src={actor.imageUrl || "https://picsum.photos/200"} 
@@ -122,69 +120,5 @@ export default function movie({ params }: Movie) {
       </div>
 </div>
     </main>
-
-    /*
-<main className='dark:bg-black h-screen flex flex-col '>
-  <Navigation />
-  <div className="relative  font-sans pt-14 before:absolute before:w-full before:h-full before:inset-0 before:bg-black before:opacity-50 before:z-10 ">
-      <img src={movieData?.backdropUrl.trim()} alt="Banner Image" className="absolute inset-0   w-full h-full object-cover" />
-
-      <div className="min-h-[350px] relative z-40 h-full max-w-6xl mx-auto flex flex-col   text-white p-6">
-      <div className="md:w-1/2 p-8 space-y-4 bg-gradient-to-r from-black to-transparent">
-    <h1 className="text-4xl text-white font-bold hover:underline cursor-pointer transition duration-300">
-      {movieData?.title}
-    </h1>
-    <p className="text-lg text-gray-300 leading-relaxed">
-      {movieData?.description}
-    </p>
-    <div className="text-md text-gray-400">
-      <p><span className="font-semibold">Release Date:</span> <span className="text-gray-200">{movieData?.releaseDate}</span></p>
-      <p><span className="font-semibold">Genre:</span> <span className="text-gray-200">Action, Drama</span></p>
-      <p><span className="font-semibold">Director:</span> <span className="text-gray-200">{movieData?.director}</span></p>
-    </div>
-  </div>
-      </div>
-    </div>
-
-  
-  <div className="p-4 m-4  bg-gray-800 text-white rounded-lg shadow-lg">
-    <h2 className="text-2xl dark:text-white font-bold mb-4">Actors & Crew</h2>
-    <div className="flex overflow-x-auto space-x-4 p-2">
-      <div className="flex-shrink-0 hover:text-yellow-500 transition duration-300 text-center">
-        <img 
-          src="https://picsum.photos/200/700" 
-          alt="Actor 1" 
-          className="w-24 h-24 rounded-full mx-auto mb-2"
-        />
-        <p>Actor 1</p>
-      </div>
-      <div className="flex-shrink-0 hover:text-yellow-500 transition duration-300 text-center">
-        <img 
-          src="https://picsum.photos/200/500" 
-          alt="Actor 2" 
-          className="w-24 h-24 rounded-full mx-auto mb-2"
-        />
-        <p>Actor 2</p>
-      </div>
-      <div className="flex-shrink-0 hover:text-yellow-500 transition duration-300 text-center">
-        <img 
-          src="https://picsum.photos/200/200" 
-          alt="Actor 3" 
-          className="w-24 h-24 rounded-full mx-auto mb-2"
-        />
-        <p>Actor 3</p>
-      </div>
-      <div className="flex-shrink-0 hover:text-yellow-500 transition duration-300 text-center">
-        <img 
-          src="https://picsum.photos/200/100" 
-          alt="Actor 4" 
-          className="w-24 h-24 rounded-full mx-auto mb-2"
-        />
-        <p>Actor 4</p>
-      </div>
-    </div>
-  </div>
-</main>
-*/
   );
 }

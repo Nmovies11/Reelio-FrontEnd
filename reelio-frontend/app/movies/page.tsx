@@ -27,10 +27,15 @@ export default function Movies() {
         }
         const data = await response.json();
         setMovies(data); // Assuming the data is an array of MovieDTO objects
-      } catch (error: any) {
+      } catch (error: unknown) {
+        if (error instanceof Error) {
         console.error('Error fetching data:', error);
         setError(error.message);
+      } else {
+        console.error('Unexpected error', error);
+        setError('An unexpected error occurred.');
       }
+    }
     };
 
     fetchMovies();

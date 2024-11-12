@@ -1,10 +1,9 @@
-import Image from 'next/image';
-
 interface MovieCardProps {
   id: number;
   title: string;
   poster: string;
 }
+
 const MovieCard = ({id, title, poster }: MovieCardProps) => {
   return (
     <a href={`/movies/${id}`} className="block transform transition duration-500 

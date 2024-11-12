@@ -27,7 +27,7 @@ const registerUser = async (username: string, email: string, password: string) =
 
 
 
-const registerPage = () => {
+const RegisterPage = () => {
   const [formData, setFormData] = useState({ username: '', email: '', password: '' });
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -135,4 +135,4 @@ const registerPage = () => {
   );
 };
 
-export default registerPage;
+export default RegisterPage;

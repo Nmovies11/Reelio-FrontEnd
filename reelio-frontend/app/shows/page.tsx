@@ -2,13 +2,8 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import Navigation from "../Components/Navigation";
-import FilterSidebar from "../Components/FilterSidebar";
 import ShowCard from "../Components/ShowCard";
 
-const sortOptions = [
-  { value: "release_date", label: "Release Date" },
-  { value: "rating", label: "Rating" },
-];
 
 export interface Shows {
   id: number;
@@ -19,7 +14,7 @@ export interface Shows {
 }
 
 
-export default function shows() {
+export default function Shows() {
   const [movies, setMovies] = useState<Shows[]>([]);
   const [error, setError] = useState<string | null>(null);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -35,7 +30,7 @@ export default function shows() {
         setMovies(data);
       } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
-        throw error;
+        setError("Could not load shows. Please try again later.");
       }
     };
 
