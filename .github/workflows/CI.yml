@@ -24,11 +24,13 @@ jobs:
 
       - name: Install dependencies
         run: |
+          cd reelio-frontend
           npm install
 
       - name: Run ESLint
         run: |
-          npm run lint  # Runs the lint script defined in package.json
+          cd reelio-frontend
+          npm run lint 
         continue-on-error: true 
 
       - name: Upload lint results as artifacts (optional)
