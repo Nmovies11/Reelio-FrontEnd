@@ -9,7 +9,7 @@ interface Show {
   releaseDate: string;
   imageUrl: string;
   backdropUrl: string;
-  seasons: Season[];  // Added to hold seasons data
+  seasons: Season[]; 
 }
 
 interface Season {
@@ -17,7 +17,7 @@ interface Season {
   seasonNumber: number;
   description: string | null;
   releaseDate: string;
-  episodes: Episode[];  // Added to hold episodes for each season
+  episodes: Episode[]; 
 }
 
 interface Episode {
@@ -44,9 +44,9 @@ export default function Show({ params }: { params: { id: number } }) {
         const response = await fetch(`${API_URL}/show/${id}`);
         const data = await response.json();
         setShowData(data);
-        setSeasons(data.seasons);  // Set the seasons for this show
+        setSeasons(data.seasons); 
         if (data.seasons.length > 0) {
-          setSelectedSeason(data.seasons[0]);  // Optionally select the first season by default
+          setSelectedSeason(data.seasons[0]);  
         }
       } catch (error) {
         console.error("Error fetching show data:", error);
@@ -58,7 +58,7 @@ export default function Show({ params }: { params: { id: number } }) {
 
   useEffect(() => {
     if (selectedSeason) {
-      setEpisodes(selectedSeason.episodes);  // Set episodes based on the selected season
+      setEpisodes(selectedSeason.episodes);  
     }
   }, [selectedSeason]);
 

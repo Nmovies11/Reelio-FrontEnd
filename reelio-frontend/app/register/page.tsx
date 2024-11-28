@@ -4,7 +4,7 @@ import React, {useState} from 'react';
 const registerUser = async (username: string, email: string, password: string) => {
     const API_URL = process.env.NEXT_PUBLIC_API_URL
     try {
-        const response = await fetch(`${API_URL}/User/register/`, {
+        const response = await fetch(`${API_URL}/register/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

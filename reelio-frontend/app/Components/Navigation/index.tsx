@@ -1,13 +1,14 @@
 "use client"
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import useAuth from '../../hooks/useAuth';
 
 
 const Navbar = () => {
   const [darkMode, setDarkMode] = useState(false);
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const pathname = usePathname();
-
+  const user = useAuth();
   useEffect(() => {
     // Check local storage for theme preference on initial load
     const savedTheme = localStorage.getItem('theme');
@@ -25,6 +26,7 @@ const Navbar = () => {
       document.documentElement.classList.remove('dark');
       localStorage.setItem('theme', 'light');
     }
+
   }, [darkMode]);
     return (
   
@@ -60,10 +62,22 @@ const Navbar = () => {
           </div>
 
         </div>
-        <a href='/account' className="relative text-white flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
-              <span className="absolute -inset-1.5"></span>
-              Profile
-            </a>
+
+        {user ? (
+              <a
+                href="/account"
+                className="relative text-white flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+              >
+                Profile
+              </a>
+            ) : (
+              <a
+                href="/login"
+                className="relative text-white flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+              >
+                Login
+              </a>
+            )}
             <button
               onClick={() => setDarkMode(!darkMode)}
               className="p-1 ml-5 bg-gray-300 dark:bg-gray-700 text-black dark:text-white rounded"

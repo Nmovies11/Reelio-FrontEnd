@@ -1,63 +1,78 @@
+"use client"
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; // Optional: If you still want to use for navigation
 
-import React from 'react';
+const LoginPage = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const router = useRouter();
 
-const loginPage = () => {
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      // Redirect to home page if token exists
+    }
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+    try {
+      // Make the API call to your login endpoint
+      const response = await fetch(`${API_URL}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Store the JWT token in localStorage
+        localStorage.setItem('token', data.token);
+        console.log('Token stored in localStorage:', localStorage.getItem('token'));
+
+        // Redirect manually if using fetch, or you could redirect after successful login
+        window.location.href = '/';  // Use window.location for redirect
+      } else {
+        setError(data.message); // Show error message from backend
+      }
+    } catch (error) {
+      setError('An error occurred during login');
+    }
+  };
+
   return (
-    <main>
-         
-    <div className="flex min-h-screen">
-      {/* Left Side: Illustration */}
-      <div className="hidden lg:flex lg:w-1/2 bg-black   justify-center items-center">
-        {/* Replace this with your illustration */}
-        <img
-          src="/path/to/your/illustration.svg" // Update with your illustration path
-          alt="Illustration"
-          className="max-w-full max-h-full object-contain"
-        />
-      </div>
-
-      {/* Right Side: Login Area */}
-      <div className="w-full lg:w-1/2 flex justify-center items-center bg-white p-8">
-        <div className="max-w-md w-full">
-          <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
-          <form>
-            <div className="mb-4">
-              <label className="block text-gray-700" htmlFor="email">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                required
-                className="mt-1 p-2 border border-gray-300 rounded w-full"
-                placeholder="you@example.com"
-              />
-            </div>
-            <div className="mb-6">
-              <label className="block text-gray-700" htmlFor="password">
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                required
-                className="mt-1 p-2 border border-gray-300 rounded w-full"
-                placeholder="******"
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition"
-            >
-              Login
-            </button>
-          </form>
+    <div>
+      <h1>Login</h1>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Email:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
         </div>
-      </div>
+        <div>
+          <label>Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        {error && <p>{error}</p>}
+        <button type="submit">Login</button>
+      </form>
     </div>
-
-    </main>
   );
 };
 
-export default loginPage;
+export default LoginPage;
