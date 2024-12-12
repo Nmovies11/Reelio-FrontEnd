@@ -4,6 +4,6 @@ node_modules
 /build
 .env
 reelio-frontend/.env.development
-reelio-frontend/.env.production
+
 reelio-frontend/.env.staging
 reelio-frontend/.env.test
