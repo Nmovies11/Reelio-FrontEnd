@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 
 const EnvironmentPage = () => {
-  const [environment, setEnvironment] = useState('Loading...AAA');
+  const [environment, setEnvironment] = useState('Loading...BBBB');
 
   useEffect(() => {
     const fetchEnvironment = async () => {
