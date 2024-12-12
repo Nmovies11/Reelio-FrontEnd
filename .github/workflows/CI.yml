@@ -89,10 +89,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         
-    - name: Install dependencies
-      run: |
-        cd reelio-frontend
-        npm install
+      - name: Install dependencies
+        run: |
+            cd reelio-frontend
+            npm install
         
       # Install npm dependencies, cache them correctly
       # and run all Cypress tests
