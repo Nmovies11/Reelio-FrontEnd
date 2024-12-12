@@ -59,7 +59,7 @@ jobs:
           context: ./reelio-frontend
           push: true
           tags: reeliocr.azurecr.io/reelio-frontend:${{ github.sha }}
-          build-args: |
+            build-args: |
             ENV_FILE=.env.staging
           file: ./reelio-frontend/Dockerfile
 
@@ -77,7 +77,7 @@ jobs:
           app-name: 'reelio-staging' 
           slot-name: 'production'
           publish-profile: ${{ secrets.AZURE_PUBLISH_STAGING }}
-          images: 'reeliocr.azurecr.io/reelio-frontend:staging${{ github.sha }}'
+          images: 'reeliocr.azurecr.io/reelio-frontend${{ github.sha }}'
 
   build_and_deploy_to_production:
     runs-on: ubuntu-latest
