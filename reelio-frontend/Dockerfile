@@ -12,7 +12,7 @@ RUN npm install
 COPY . .
 
 # Set the environment file based on the build argument
-ARG ENV_FILE=.env.production
+ARG ENV_FILE= .env.production
 COPY $ENV_FILE .env
 
 

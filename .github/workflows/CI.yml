@@ -102,8 +102,6 @@ jobs:
           context: ./reelio-frontend
           push: true
           tags: reeliocr.azurecr.io/reelio-frontend:${{ github.sha }}
-          build-args: |
-            ENV_FILE=.env.production
           file: ./reelio-frontend/Dockerfile
 
       - name: Deploy to Azure Production Web App
