@@ -79,7 +79,7 @@ jobs:
           push: true
           tags: reeliocr.azurecr.io/reelio-frontend:${{ github.sha }}
           file: ./reelio-frontend/Dockerfile
-          build-args: |
+          enviroment: |
             NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
 
 
