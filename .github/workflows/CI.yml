@@ -60,7 +60,7 @@ jobs:
           push: true
           tags: reeliocr.azurecr.io/reelio-frontend-staging:${{ github.sha }}
           build-args: |
-            ENV_FILE=.env.staging
+            NEXT_PUBLIC_API_URL=https://reelio-api-staging-gfdncgbhdpcyd9dg.northeurope-01.azurewebsites.net
           file: ./reelio-frontend/Dockerfile
 
   deploy_to_staging:
@@ -102,6 +102,8 @@ jobs:
           context: ./reelio-frontend
           push: true
           tags: reeliocr.azurecr.io/reelio-frontend:${{ github.sha }}
+          build-args: |
+            NEXT_PUBLIC_API_URL=https://reelio-api-bxffd9b2eebhb2d0.northeurope-01.azurewebsites.net
           file: ./reelio-frontend/Dockerfile
 
       - name: Deploy to Azure Production Web App

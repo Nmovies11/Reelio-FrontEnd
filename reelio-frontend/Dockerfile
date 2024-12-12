@@ -12,8 +12,14 @@ RUN npm install
 COPY . .
 
 # Set the environment file based on the build argument
-ARG ENV_FILE= .env.production
-COPY $ENV_FILE .env
+ARG ENV_FILE=.env.production
+
+# Ensure the specified environment file is available and copy it
+RUN if [ -f "$ENV_FILE" ]; then cp "$ENV_FILE" .env; else echo "Error: $ENV_FILE not found!" && exit 1; fi
+
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
 
 
 # Expose the port that the app will run on
