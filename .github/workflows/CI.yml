@@ -91,15 +91,16 @@ jobs:
         
       - name: Install dependencies
         run: |
-            cd reelio-frontend
-            npm install
+          cd reelio-frontend 
+          npm install
+
         
       # Install npm dependencies, cache them correctly
       # and run all Cypress tests
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          install: false
+          working-directory: reelio-frontend
           build: npm run build
           start: npm start
 

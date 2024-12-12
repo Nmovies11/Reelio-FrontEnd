@@ -10,6 +10,7 @@
     "dev:staging": "cross-env NEXT_PUBLIC_API_URL=https://reelio-api-staging-gfdncgbhdpcyd9dg.northeurope-01.azurewebsites.net next dev",
     "build:staging": "cross-env NEXT_PUBLIC_API_URL=https://reelio-api-staging-gfdncgbhdpcyd9dg.northeurope-01.azurewebsites next build",
     "start:staging": "cross-env NEXT_PUBLIC_API_URL=https://reelio-api-staging-gfdncgbhdpcyd9dg.northeurope-01.azurewebsites next start"
+  
   },
   "dependencies": {
     "dotenv": "^16.4.7",
