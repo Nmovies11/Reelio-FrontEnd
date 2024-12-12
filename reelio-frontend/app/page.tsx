@@ -5,6 +5,7 @@ export default function Home() {
   return (
     <main className="dark:bg-black bg-white h-screen">
                  <Navigation />
+
                  
                 <div className="grid grid-cols-2 grid-rows-2 gap-4 p-4 h-full">
                   <div className="col-span-1 row-span-1 bg-gray-800 p-4">

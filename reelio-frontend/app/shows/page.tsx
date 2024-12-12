@@ -21,7 +21,7 @@ export default function Shows() {
   useEffect(() => {
     const fetchShows = async () => {
       try {
-        const response = await fetch(`${API_URL}/show/recentshows`);
+        const response = await fetch(`${API_URL}/shows/recentshows`);
         if (!response.ok) {
           throw new Error("Failed to fetch shows");
         }

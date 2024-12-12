@@ -1,12 +1,11 @@
 "use client"
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'; // Optional: If you still want to use for navigation
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -17,6 +16,7 @@ const LoginPage = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
     try {
@@ -36,42 +36,78 @@ const LoginPage = () => {
         localStorage.setItem('token', data.token);
         console.log('Token stored in localStorage:', localStorage.getItem('token'));
 
-        // Redirect manually if using fetch, or you could redirect after successful login
-        window.location.href = '/';  // Use window.location for redirect
+        window.location.href = '/';  
       } else {
         setError(data.message); // Show error message from backend
       }
     } catch (error) {
       setError('An error occurred during login');
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+    <main className="flex min-h-screen bg-gray-100">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-r from-blue-500 to-purple-600 justify-center items-center">
+        <img
+          src="/path/to/your/illustration.svg"
+          alt="Illustration"
+          className="max-w-full max-h-full object-contain"
+        />
+      </div>
+      <div className="w-full lg:w-1/2 flex justify-center items-center bg-white p-8">
+        <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-8">
+          <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">Login</h1>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label className="block text-gray-700 font-semibold" htmlFor="email">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="mt-1 p-3 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="you@example.com"
+              />
+            </div>
+            <div className="mb-6">
+              <label className="block text-gray-700 font-semibold" htmlFor="password">
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="mt-1 p-3 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="******"
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600 transition duration-300"
+              disabled={loading}
+            >
+              {loading ? 'Logging in...' : 'Login'}
+            </button>
+          </form>
+          {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
+          <div className="mt-4 text-center">
+            <a href="/forgot-password" className="text-blue-500 hover:underline">Forgot your password?</a>
+          </div>
+          <div className="mt-4 text-center">
+            <span className="text-gray-700">Do&apos; have an account? </span>
+            <a href="/register" className="text-blue-500 hover:underline">Register</a>
+          </div>
         </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        {error && <p>{error}</p>}
-        <button type="submit">Login</button>
-      </form>
-    </div>
+      </div>
+    </main>
   );
 };
 

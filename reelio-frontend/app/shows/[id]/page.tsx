@@ -41,7 +41,7 @@ export default function Show({ params }: { params: { id: number } }) {
   useEffect(() => {
     const fetchShowData = async () => {
       try {
-        const response = await fetch(`${API_URL}/show/${id}`);
+        const response = await fetch(`${API_URL}/shows/${id}`);
         const data = await response.json();
         setShowData(data);
         setSeasons(data.seasons); 

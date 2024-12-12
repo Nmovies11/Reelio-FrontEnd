@@ -7,7 +7,7 @@ interface User {
 
 const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true); // Track loading state
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const API_URL = process.env.NEXT_PUBLIC_API_URL
@@ -40,13 +40,18 @@ const useAuth = () => {
         }
       } catch (err) {
         setError('An unexpected error occurred');
+        console.log(error, err);
       } finally {
         setLoading(false);
+        if(loading)
+        {
+          console.log("loading");
+        }
       }
     };
 
     checkAuthentication();
-  }, [API_URL, router]);
+  }, [API_URL, router, error, loading]);
 
   return user;
 };

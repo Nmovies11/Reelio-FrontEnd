@@ -21,7 +21,7 @@ export default function Movies() {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await fetch(`${API_URL}/movie/recentmovies`);
+        const response = await fetch(`${API_URL}/movies/recentmovies`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

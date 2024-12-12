@@ -1,0 +1,9 @@
+node_modules
+
+/.cache
+/build
+.env
+reelio-frontend/.env.production
+reelio-frontend/.env.development
+reelio-frontend/.env.test
+reelio-frontend/.env.staging

@@ -6,9 +6,10 @@ import useAuth from '../../hooks/useAuth';
 
 const Navbar = () => {
   const [darkMode, setDarkMode] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const pathname = usePathname();
   const user = useAuth();
+
+
   useEffect(() => {
     // Check local storage for theme preference on initial load
     const savedTheme = localStorage.getItem('theme');
@@ -28,6 +29,9 @@ const Navbar = () => {
     }
 
   }, [darkMode]);
+
+
+
     return (
   
 <nav className="bg-gray-800 border-purple-600 border-b-2">
