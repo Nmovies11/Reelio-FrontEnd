@@ -59,7 +59,7 @@ jobs:
           context: ./reelio-frontend
           push: true
           tags: reeliocr.azurecr.io/reelio-frontend:${{ github.sha }}
-            build-args: |
+          build-args: |
             ENV_FILE=.env.staging
           file: ./reelio-frontend/Dockerfile
 
