@@ -110,7 +110,7 @@ jobs:
 
   build_and_deploy_to_production:
     runs-on: ubuntu-latest
-    needs: deploy_to_staging
+    needs: run_cypress_tests
     if: success()  # Only run if Cypress tests pass
     steps:
       - name: Check out code
