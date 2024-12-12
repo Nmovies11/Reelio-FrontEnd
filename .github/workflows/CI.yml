@@ -86,27 +86,16 @@ jobs:
     runs-on: ubuntu-24.04
     needs: deploy_to_staging
     steps:
-      - name: Check out code
+      - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-
-      - name: Install dependencies
-        run: |
-          cd reelio-frontend
-          npm install
-
-      - name: Install Cypress
-        run: |
-          npm install cypress --save-dev
-
-      # Run Cypress tests
+      # Install npm dependencies, cache them correctly
+      # and run all Cypress tests
       - name: Cypress run
         uses: cypress-io/github-action@v6
+        with:
+          build: npm run build
+          start: npm start
+
 
 
   build_and_deploy_to_production:
