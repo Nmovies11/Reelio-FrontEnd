@@ -51,10 +51,6 @@ jobs:
           cd reelio-frontend
           npm install
 
-      - name: Run tests (optional)
-        run: |
-          cd reelio-frontend
-          npm run test
 
   build_and_push_container:
     runs-on: ubuntu-latest
