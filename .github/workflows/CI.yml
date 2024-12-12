@@ -74,8 +74,8 @@ jobs:
         id: deploy-to-staging
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'reelio-staging'  # Use the staging Azure Web App name
-          slot-name: 'staging'
+          app-name: 'reelio-staging' 
+          slot-name: 'production'
           publish-profile: ${{ secrets.AZURE_PUBLISH_STAGING }}
           images: 'reeliocr.azurecr.io/reelio-frontend-${{ github.sha }}'
 
