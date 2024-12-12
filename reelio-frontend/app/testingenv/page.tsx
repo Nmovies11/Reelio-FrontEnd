@@ -1,8 +1,8 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState   } from 'react';
 
 const EnvironmentPage = () => {
-  const [environment, setEnvironment] = useState('Loading...BBBB');
+  const [environment, setEnvironment] = useState('Loading...CCCC');
 
   useEffect(() => {
     const fetchEnvironment = async () => {

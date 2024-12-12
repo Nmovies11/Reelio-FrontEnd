@@ -1,16 +1,26 @@
+# Use the official Node.js image as the base image
 FROM node:18-alpine
 
-    
+# Set working directory in the container
 WORKDIR /app
 
-COPY package*.json ./
-
+# Install dependencies
+COPY package.json package-lock.json ./
 RUN npm install
 
+# Copy the Next.js app into the container
 COPY . .
 
-RUN npm run build
+# Set the environment file based on the build argument
+ARG ENV_FILE=.env.production
+COPY $ENV_FILE .env
 
+
+# Expose the port that the app will run on
 EXPOSE 3000
 
-CMD ["npm", "run", "start"]
+# Build the Next.js app
+RUN npm run build
+
+# Start the Next.js app
+CMD ["npm", "start"]

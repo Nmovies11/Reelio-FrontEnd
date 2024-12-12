@@ -21,7 +21,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'  
+          node-version: '20'
 
       - name: Install dependencies
         run: |
@@ -33,28 +33,9 @@ jobs:
           cd reelio-frontend
           npm run lint
 
-
-  build_and_test:
+  build_image_for_staging:
     runs-on: ubuntu-latest
     needs: lint
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install dependencies
-        run: |
-          cd reelio-frontend
-          npm install
-
-
-  build_and_push_container:
-    runs-on: ubuntu-latest
-    needs: build_and_test
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -71,29 +52,65 @@ jobs:
           username: ${{ secrets.CONTAINER_USERNAME }}
           password: ${{ secrets.CONTAINER_PASSWORD }}
 
-      # Build and push container image
-      - name: Build and push container image to registry
+      # Build and push container image for staging
+      - name: Build and push container image for staging
+        uses: docker/build-push-action@v3
+        with:
+          context: ./reelio-frontend
+          push: true
+          tags: reeliocr.azurecr.io/reelio-frontend:staging-${{ github.sha }}
+          build-args: |
+            ENV_FILE=.env.staging
+          file: ./reelio-frontend/Dockerfile
+
+  deploy_to_staging:
+    runs-on: ubuntu-latest
+    needs: build_image_for_staging
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Azure Staging Web App
+        id: deploy-to-staging
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'reelio-staging'  # Use the staging Azure Web App name
+          slot-name: 'staging'
+          publish-profile: ${{ secrets.AZURE_PUBLISH_STAGING }}
+          images: 'reeliocr.azurecr.io/reelio-frontend-${{ github.sha }}'
+
+  build_and_deploy_to_production:
+    runs-on: ubuntu-latest
+    needs: deploy_to_staging
+    if: success()  # Only run if Cypress tests pass
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      # Log in to Azure Container Registry
+      - name: Log in to Azure Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: https://reeliocr.azurecr.io/
+          username: ${{ secrets.CONTAINER_USERNAME }}
+          password: ${{ secrets.CONTAINER_PASSWORD }}
+
+      # Build and push container image for production
+      - name: Build and push container image for production
         uses: docker/build-push-action@v3
         with:
           context: ./reelio-frontend
           push: true
           tags: reeliocr.azurecr.io/reelio-frontend:${{ github.sha }}
+          build-args: |
+            ENV_FILE=.env.production
           file: ./reelio-frontend/Dockerfile
 
-
-  deploy_to_azure:
-    runs-on: ubuntu-latest
-    needs: build_and_push_container
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
+      - name: Deploy to Azure Production Web App
+        id: deploy-to-production
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'reelio'
+          app-name: 'reelio'  # Use the production Azure Web App name
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZURE_PUBLISH }}
           images: 'reeliocr.azurecr.io/reelio-frontend:${{ github.sha }}'
