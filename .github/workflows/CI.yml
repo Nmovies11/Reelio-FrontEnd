@@ -83,7 +83,7 @@ jobs:
         run: sleep 120  # Adjust the duration (in seconds) if necessary
 
   run_cypress_tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: deploy_to_staging
     steps:
       - name: Check out code
