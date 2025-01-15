@@ -1,51 +1,89 @@
-"use client";
+"use client"
+
+import { useState } from "react";
 import Navigation from "../Components/Navigation";
 
-const account = () => {
+export default function Account() {
+  const [activeTab, setActiveTab] = useState("movies");
+
+  const user = {
+    name: "John Doe",
+    bio: "Avid movie and TV show enthusiast. Loves thrillers and sci-fi.",
+    avatar: "https://via.placeholder.com/100", // Replace with actual avatar URL
+    watchedMovies: [
+      "Inception",
+      "The Matrix",
+      "Interstellar",
+      "Blade Runner 2049",
+    ],
+    watchedShows: ["Breaking Bad", "Stranger Things", "The Mandalorian"],
+  };
+
   return (
-    <main className="dark:bg-black dark:text-white min-h-screen">
-      <Navigation />
-      <div className="container mx-auto">
-        {/* Banner Section */}
-        <div
-          className="backdrop relative flex h-[60vh] lg:h-[25vh]"
-          style={{
-            backgroundImage: `url(${"https://image.tmdb.org/t/p/original/oblUNeHlwV3VsjB5ITMlco5ZSOF.jpg"})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        >
-          {/* Overlay */}
-          <div className="overlay absolute inset-0 bg-black bg-opacity-60"></div>
-
-          {/* Settings Button */}
-          <button
-            className="absolute top-4 right-4 bg-white text-black dark:bg-gray-800 dark:text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-100 dark:hover:bg-gray-700"
-            onClick={() => alert("Go to Settings")}
-          >
-            Settings
-          </button>
-        </div>
-
-        {/* Profile Picture */}
-        <div className="relative">
-          <div className="absolute top-[-4rem] left-1/2 transform -translate-x-1/2 z-10">
-            <img
-              src="https://via.placeholder.com/150"
-              alt="Profile"
-              className="w-32 h-32 rounded-full border-4 border-white dark:border-black object-cover"
-            />
+    <>
+    <Navigation />
+    <div className="min-h-screen bg-white dark:bg-black py-10">
+      <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+        {/* User Info Section */}
+        <div className="flex items-center p-6 bg-purple-600 text-white">
+          <img
+            src={user.avatar}
+            alt={`${user.name}'s avatar`}
+            className="w-24 h-24 rounded-full border-4 border-white"
+          />
+          <div className="ml-4">
+            <h2 className="text-2xl font-bold">{user.name}</h2>
+            <p className="mt-2">{user.bio}</p>
           </div>
         </div>
 
-        {/* Content Section */}
-        <div className="pt-20 text-center">
-          <h1 className="text-2xl font-bold">Your Name</h1>
-          <p className="text-gray-500 dark:text-gray-400">Your Bio or Tagline</p>
+        {/* Tabs Section */}
+        <div className="p-6">
+          <div className="flex space-x-4 border-b-2">
+            <button
+              className={`pb-2 ${
+                activeTab === "movies"
+                  ? "border-b-4 border-blue-600 text-blue-600"
+                  : "text-gray-600"
+              }`}
+              onClick={() => setActiveTab("movies")}
+            >
+              Movies
+            </button>
+            <button
+              className={`pb-2 ${
+                activeTab === "shows"
+                  ? "border-b-4 border-blue-600 text-blue-600"
+                  : "text-gray-600"
+              }`}
+              onClick={() => setActiveTab("shows")}
+            >
+              Shows
+            </button>
+          </div>
+
+          {/* Tab Content */}
+          <div className="mt-4">
+            {activeTab === "movies" && (
+              <div>
+                <h3 className="text-lg font-semibold mb-2">Watched Movies</h3>
+                <ul className="list-disc pl-6">
+
+                </ul>
+              </div>
+            )}
+            {activeTab === "shows" && (
+              <div>
+                <h3 className="text-lg font-semibold mb-2">Watched Shows</h3>
+                <ul className="list-disc pl-6">
+
+                </ul>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </main>
+    </div>
+    </>
   );
-};
-
-export default account;
+}

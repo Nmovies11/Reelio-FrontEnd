@@ -21,7 +21,7 @@ const LoginPage = () => {
 
     try {
       // Make the API call to your login endpoint
-      const response = await fetch(`${API_URL}/login`, {
+      const response = await fetch(`${API_URL}/users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -51,11 +51,7 @@ const LoginPage = () => {
   return (
     <main className="flex min-h-screen bg-gray-100">
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-r from-blue-500 to-purple-600 justify-center items-center">
-        <img
-          src="/path/to/your/illustration.svg"
-          alt="Illustration"
-          className="max-w-full max-h-full object-contain"
-        />
+
       </div>
       <div className="w-full lg:w-1/2 flex justify-center items-center bg-white p-8">
         <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-8">
@@ -102,7 +98,7 @@ const LoginPage = () => {
             <a href="/forgot-password" className="text-blue-500 hover:underline">Forgot your password?</a>
           </div>
           <div className="mt-4 text-center">
-            <span className="text-gray-700">Do&apos; have an account? </span>
+            <span className="text-gray-700">Don`t have an account? </span>
             <a href="/register" className="text-blue-500 hover:underline">Register</a>
           </div>
         </div>

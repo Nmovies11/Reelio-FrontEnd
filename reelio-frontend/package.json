@@ -10,11 +10,11 @@
     "dev:staging": "cross-env NEXT_PUBLIC_API_URL=https://reelio-api-staging-gfdncgbhdpcyd9dg.northeurope-01.azurewebsites.net next dev",
     "build:staging": "cross-env NEXT_PUBLIC_API_URL=https://reelio-api-staging-gfdncgbhdpcyd9dg.northeurope-01.azurewebsites next build",
     "start:staging": "cross-env NEXT_PUBLIC_API_URL=https://reelio-api-staging-gfdncgbhdpcyd9dg.northeurope-01.azurewebsites next start"
-  
   },
   "dependencies": {
     "dotenv": "^16.4.7",
     "env-cmd": "^10.1.0",
+    "jwt-decode": "^4.0.0",
     "next": "latest",
     "react": "^18",
     "react-dom": "^18"

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; 
+
 interface User {
-  email: string;
-  name: string;
+  id: string;  // Assuming the ID is a string (UUID)
 }
 
 const useAuth = () => {
@@ -10,12 +10,16 @@ const useAuth = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     const checkAuthentication = async () => {
       const token = localStorage.getItem('token');
-
+      
+      if (!token) {
+        setLoading(false);
+        return;
+      }
 
       try {
         const response = await fetch(`${API_URL}/account`, {
@@ -25,9 +29,9 @@ const useAuth = () => {
           },
         });
 
-        //remove token if not valid
         if (response.status === 401) {
           localStorage.removeItem('token');
+          setError('Unauthorized');
         }
 
         if (response.ok) {
@@ -40,20 +44,16 @@ const useAuth = () => {
         }
       } catch (err) {
         setError('An unexpected error occurred');
-        console.log(error, err);
+        console.error(err);
       } finally {
         setLoading(false);
-        if(loading)
-        {
-          console.log("loading");
-        }
       }
     };
 
     checkAuthentication();
-  }, [API_URL, router, error, loading]);
+  }, [API_URL]);
 
-  return user;
+  return { user, loading, error };
 };
 
 export default useAuth;

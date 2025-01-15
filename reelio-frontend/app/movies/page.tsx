@@ -1,8 +1,9 @@
-"use client"
-import React, { useEffect, useState } from 'react';
-import Navigation from '../Components/Navigation';
-import MovieCard from '../Components/MovieCard';
-import FilterSidebar from '../Components/FilterSidebar';
+"use client";
+import React, { useEffect, useState } from "react";
+import Navigation from "../Components/Navigation";
+import MovieCard from "../Components/MovieCard";
+import FilterSidebar from "../Components/FilterSidebar";
+import { getMovies } from "../api/movie/api"; 
 
 export interface MovieDTO {
   id: number;
@@ -16,62 +17,127 @@ export interface MovieDTO {
 export default function Movies() {
   const [movies, setMovies] = useState<MovieDTO[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
+  const [searchQuery, setSearchQuery] = useState<string | null>(null);
+  const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const response = await fetch(`${API_URL}/movies/recentmovies`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setMovies(data); // Assuming the data is an array of MovieDTO objects
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-        console.error('Error fetching data:', error);
+  const fetchMovies = async () => {
+    try {
+      const queryParams = new URLSearchParams({
+        pageNumber: pageNumber.toString(),
+        pageSize: pageSize.toString(),
+        ...(searchQuery && { searchQuery }),
+        ...(selectedGenre && { genre: selectedGenre }),
+      });
+
+      if (!API_URL) {
+        throw new Error("API_URL is not defined");
+      }
+      const data = await getMovies(API_URL, queryParams); 
+      setMovies(data.items);
+
+      setTotalPages(data.totalPages);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Error fetching data:", error);
         setError(error.message);
       } else {
-        console.error('Unexpected error', error);
-        setError('An unexpected error occurred.');
+        console.error("Unexpected error", error);
+        setError("An unexpected error occurred.");
       }
     }
-    };
+  };
 
+  useEffect(() => {
     fetchMovies();
-  }, [API_URL]);
+  }, [pageNumber, pageSize, searchQuery, selectedGenre]);
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setPageNumber(1);
+  };
+
+  const handleGenreSelect = (genre: string | null) => {
+    setSelectedGenre(genre);
+    setPageNumber(1);
+  };
 
   const sortOptions = [
-    { value: 'release_date', label: 'Release Date' },
-    { value: 'rating', label: 'Rating' },
+    { value: "release_date", label: "Release Date" },
+    { value: "rating", label: "Rating" },
+  ];
+
+  const genreOptions = [
+    { value: "action", label: "Action" },
+    { value: "drama", label: "Drama" },
+    { value: "comedy", label: "Comedy" },
+    { value: "thriller", label: "Thriller" },
   ];
 
   return (
-    <main className='dark:bg-black h-full'>
+    <div className="dark:bg-black h-min">
       <Navigation />
       <h1 className="text-6xl m-6 dark:text-white font-bold flex justify-center">Movies</h1>
       <div className="flex justify-center mb-6">
         <p className="text-lg dark:text-gray-400">Explore your favorite movies!</p>
       </div>
-      <div className='ml-12 mr-4 flex space-x-24'>
-        <FilterSidebar sortOptions={sortOptions} filterOptions={[]} onSort={(value) => console.log(value)} onFilter={(value, checked) => console.log(value, checked)} />
-        <div className='ml-5'>
+      <div className="ml-12 mr-4 flex space-x-24">
+        <FilterSidebar
+          sortOptions={sortOptions}
+          genreOptions={genreOptions}
+          onSort={(value) => console.log(value)}
+          onGenreSelect={handleGenreSelect}
+          onSearch={handleSearch}
+        />
+        <div className="ml-5">
           {error ? (
             <div className="flex flex-col items-center justify-center h-full">
-              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-              <strong className="font-bold">Error:</strong>
-              <span className="block sm:inline"> {error}</span>
+              <div
+                className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+                role="alert"
+              >
+                <strong className="font-bold">Error:</strong>
+                <span className="block sm:inline"> {error}</span>
               </div>
             </div>
           ) : (
-            <div className='grid grid-cols-1 sm:grid-cols-2 pb-8 lg:grid-cols-3 xl:grid-cols-5 gap-6 p-4'>
-              {movies && movies.map((movie: MovieDTO, index: number) => (
-                <MovieCard key={index} id={movie.id} title={movie.title} poster={movie.imageUrl} />
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 pb-8 lg:grid-cols-3 xl:grid-cols-5 gap-6 p-4">
+                {movies.map((movie: MovieDTO, index: number) => (
+                  <MovieCard
+                    key={index}
+                    id={movie.id}
+                    title={movie.title}
+                    poster={movie.imageUrl}
+                  />
+                ))}
+              </div>
+              <div className="flex justify-center items-center space-x-4 mt-6">
+                <button
+                  className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white rounded disabled:opacity-50"
+                  onClick={() => setPageNumber(pageNumber - 1)}
+                  disabled={pageNumber <= 1}
+                >
+                  Previous
+                </button>
+                <span className="text-gray-700 dark:text-white">
+                  Page {pageNumber} of {totalPages}
+                </span>
+                <button
+                  className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white rounded disabled:opacity-50"
+                  onClick={() => setPageNumber(pageNumber + 1)}
+                  disabled={pageNumber >= totalPages}
+                >
+                  Next
+                </button>
+              </div>
+            </>
           )}
         </div>
       </div>
-    </main>
+    </div>
   );
 }

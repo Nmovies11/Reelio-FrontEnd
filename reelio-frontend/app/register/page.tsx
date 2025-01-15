@@ -4,7 +4,7 @@ import React, {useState} from 'react';
 const registerUser = async (username: string, email: string, password: string) => {
     const API_URL = process.env.NEXT_PUBLIC_API_URL
     try {
-        const response = await fetch(`${API_URL}/register/`, {
+        const response = await fetch(`${API_URL}/users/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -70,11 +70,7 @@ const RegisterPage = () => {
     <main>
       <div className="flex min-h-screen">
         <div className="hidden lg:flex lg:w-1/2 bg-black justify-center items-center">
-          <img
-            src="/path/to/your/illustration.svg"
-            alt="Illustration"
-            className="max-w-full max-h-full object-contain"
-          />
+
         </div>
         <div className="w-full lg:w-1/2 flex justify-center items-center bg-white p-8">
           <div className="max-w-md w-full">
@@ -128,6 +124,14 @@ const RegisterPage = () => {
             </form>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {success && <p style={{ color: 'green' }}>{success}</p>}
+            <div>
+              <p className="text-center mt-4">
+                Already have an account?{' '}
+                <a href="/login" className="text-blue-500 hover:underline">
+                  Log in
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       </div>
