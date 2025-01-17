@@ -47,6 +47,7 @@ const RegisterPage = () => {
     try {
       await registerUser(formData.username, formData.email, formData.password);
       setSuccess('Registration successful!');
+      window.location.href = '/login';
     } catch (error) {
       if (error instanceof Error) {
         if (error.message.includes('NetworkError')) {

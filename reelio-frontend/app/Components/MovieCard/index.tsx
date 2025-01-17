@@ -11,9 +11,9 @@ const MovieCard = ({id, title, poster }: MovieCardProps) => {
     className="block transform transition duration-500 
                                 hover:scale-110  max-w-xs rounded overflow-hidden shadow-lg bg-purple-700">
                                   
-      <div className="h-72"> {/* Fixed height for image container */}
+      <div className="h-72"> 
       <img
-        className="w-full h-full object-cover" // Use object-cover for uniformity
+        className="w-full h-full object-cover" 
         src={poster}
         alt={`Poster of ${title}`}
         width={300} 

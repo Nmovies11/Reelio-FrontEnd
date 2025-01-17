@@ -2,8 +2,8 @@ import {jwtDecode} from "jwt-decode";
 
 interface DecodedToken {
   id: number;
-  exp: number;  // Expiry time
-  iat: number;  // Issued at time
+  exp: number;  
+  iat: number;  
 }
 
 const decodeToken = (token: string) => {

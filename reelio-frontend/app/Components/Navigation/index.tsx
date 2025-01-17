@@ -9,6 +9,12 @@ const Navbar = () => {
   const pathname = usePathname();
   const { user, loading } = useAuth();
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsOpen(prevState => !prevState);
+  };
+
   useEffect(() => {
     console.log("user:", user);
 
@@ -80,27 +86,54 @@ const Navbar = () => {
             </div>
           </div>
           <div className="flex items-center">
-            {user ? (
-              <a
-                href={`/account/${user.id}`}
-                className="text-white flex rounded-full bg-gray-800 text-sm"
-              >
-                Profile
-              </a>
-            ) : (
-              <a
+          {user ? (
+        <div>
+          <button
+            onClick={toggleDropdown}
+            className="text-white flex items-center rounded-full bg-purple-600 hover:bg-purple-700 text-sm px-4 py-2"
+          >           Profile
+
+          </button>
+          {isOpen && (
+          <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-50">
+          <a
+            href={`/account/${user.id}`}
+            className="block text-gray-800 px-4 py-2 hover:bg-gray-100"
+          >
+            Profile
+          </a>
+          <a
+            href="/logout"
+            className="block text-gray-800 px-4 py-2 hover:bg-gray-100"
+          >
+            Logout
+          </a>
+        </div>
+      )}
+    </div>
+      ) : (
+                <a
                 href="/login"
-                className="text-white flex rounded-full bg-gray-800 text-sm"
-              >
+                className="text-white flex items-center rounded-full bg-purple-600 hover:bg-purple-700 text-sm px-4 py-2"
+                >
                 Login
-              </a>
+                </a>
             )}
             <button
               onClick={() => setDarkMode(!darkMode)}
               className="p-1 ml-5 bg-gray-300 dark:bg-gray-700 text-black dark:text-white rounded"
             >
-              {/* Dark Mode Icon */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 -960 960 960"
+              className={darkMode ? 'fill-white' : 'fill-black'}
+            >
+              <path d="M480-120q-150 0-255-105T120-480t105-255 255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120m0-80q88 0 158-48.5T740-375q-20 5-40 8t-40 3q-123 0-209.5-86.5T364-660q0-20 3-40t8-40q-78 32-126.5 102T200-480q0 116 82 198t198 82m-10-270"/>
+            </svg>
             </button>
+
           </div>
         </div>
       </div>

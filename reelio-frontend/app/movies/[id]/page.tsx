@@ -24,6 +24,8 @@ export default function Movie({ params }: { params: { id: number } }) {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const user = useAuth();
 
+
+  const [backdropImageLoaded, setBackdropImageLoaded] = useState(false);
   const [movieData, setMovieData] = useState<MovieData | null>(null);
   const [showModal, setShowModal] = useState(false); // State to control the modal
   const [token, setToken] = useState<string | null>(null);
@@ -51,6 +53,16 @@ export default function Movie({ params }: { params: { id: number } }) {
 
     fetchMovieData();
   }, [API_URL, id]);
+
+
+    // Preload the backdrop image (if it's not already)
+    useEffect(() => {
+      if (movieData?.backdropUrl) {
+        const image = new Image();
+        image.src = movieData.backdropUrl;
+        image.onload = () => setBackdropImageLoaded(true);
+      }
+    }, [movieData?.backdropUrl]);
 
   const handleAddToWatchlist = () => {
     setShowModal(true);
@@ -108,7 +120,7 @@ export default function Movie({ params }: { params: { id: number } }) {
       <div
         className="backdrop relative flex h-[60vh] lg:h-[95vh]"
         style={{
-          backgroundImage: `url(${movieData?.backdropUrl})`,
+          backgroundImage: `url(${backdropImageLoaded ? movieData?.backdropUrl : '/path/to/placeholder-image.jpg'})`,
         }}
         data-test-id="movie-backdrop"
       >

@@ -20,9 +20,8 @@ interface ContentDetails {
 }
 
 interface User {
-  name: string;
-  bio: string;
-  avatar: string;
+  username: string;
+  email: string;
 }
 
 export default function Movie({ params }: { params: { id: number } }) {
@@ -53,6 +52,7 @@ export default function Movie({ params }: { params: { id: number } }) {
           throw new Error("Failed to fetch user data");
         }
         const data = await response.json();
+        console.log(data);
         setFetchedUser(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -122,12 +122,10 @@ export default function Movie({ params }: { params: { id: number } }) {
         <div className="flex items-center p-6 bg-purple-600 text-white">
           <img
             src={"https://picsum.photos/200/300"}
-            alt={`${fetchedUser.name}'s avatar`}
             className="w-24 h-24 rounded-full border-4 border-white"
           />
           <div className="ml-4">
-            <h2 className="text-2xl font-bold">{fetchedUser.name}</h2>
-            <p className="mt-2">{fetchedUser.bio}</p>
+            <h2 className="text-2xl font-bold">{fetchedUser.username}</h2>
           </div>
         </div>
 
@@ -231,6 +229,7 @@ export default function Movie({ params }: { params: { id: number } }) {
 
                           </div>
                         )}
+                        <div className="tailwind">aa</div>
                       </li>
                     ))
                   ) : (
