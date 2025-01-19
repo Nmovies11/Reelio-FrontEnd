@@ -10,14 +10,17 @@ const LoginPage = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      // Redirect to home page if token exists
+      window.location.href = '/';
     }
   }, []);
+
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 
     try {
       // Make the API call to your login endpoint

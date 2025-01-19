@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { AuthProvider } from "./context/AuthContext"; 
+import { AuthProvider } from "./context/AuthContext";
 import "./globals.css";
+import Head from "next/head";  // Import Head component to add head content
 
 const geistSans = localFont({
   src: "../public/fonts/GeistVF.woff",
@@ -24,11 +25,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Fetch the API URL from environment variable
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <Head>
+      <link rel="preconnect" href="https://image.tmdb.org" />
+        
+        <link rel="dns-prefetch" href="https://image.tmdb.org" />
+      </Head>
+      <body className={`${geistSans.variable} ${geistMono.variable} dark:bg-black antialiased`}>
         {/* Wrap the application with AuthProvider */}
         <AuthProvider>{children}</AuthProvider>
       </body>

@@ -11,6 +11,7 @@ interface MovieData {
   imageUrl: string;
   backdropUrl: string;
   director: string;
+  runtime: number;
   actors: {
     id: number;
     name: string;
@@ -64,6 +65,12 @@ export default function Movie({ params }: { params: { id: number } }) {
       }
     }, [movieData?.backdropUrl]);
 
+    const formatRuntime = (runtimeInMinutes: number) => {
+      const hours = Math.floor(runtimeInMinutes / 60);
+      const minutes = runtimeInMinutes % 60;
+      return `${hours}h ${minutes}min`;
+    };
+
   const handleAddToWatchlist = () => {
     setShowModal(true);
   };
@@ -113,14 +120,16 @@ export default function Movie({ params }: { params: { id: number } }) {
     }
   };
 
+
+  
   return (
-    <main className="dark:bg-black bg-white h-screen">
+    <main className="dark:bg-black  bg-white h-screen">
       <Navigation />
 
       <div
         className="backdrop relative flex h-[60vh] lg:h-[95vh]"
         style={{
-          backgroundImage: `url(${backdropImageLoaded ? movieData?.backdropUrl : '/path/to/placeholder-image.jpg'})`,
+          backgroundImage: `url(${backdropImageLoaded ? movieData?.backdropUrl : ''})`,
         }}
         data-test-id="movie-backdrop"
       >
@@ -138,13 +147,11 @@ export default function Movie({ params }: { params: { id: number } }) {
               className="flex items-center space-x-4 text-sm lg:text-lg"
               data-test-id="movie-details"
             >
-              <span className="rounded bg-green-600 px-2 py-1 text-xs lg:text-sm">
-                PG-13
-              </span>
+
               <span>
                 Release Date: <strong>{movieData?.releaseDate}</strong>
               </span>
-              <span>2h 14min</span>
+              <span>{movieData?.runtime && formatRuntime(movieData.runtime)}</span>
             </div>
             <p
               className="text-gray-300 leading-relaxed text-sm lg:text-lg"
@@ -252,6 +259,26 @@ export default function Movie({ params }: { params: { id: number } }) {
           </div>
         </div>
       )}
+
+<div className="container dark:bg-black mx-auto py-6">
+        <div className="p-4 m-4 border-purple-700 border bg-gray-800 text-white rounded-lg shadow-lg">
+          <h2 className="text-2xl dark:text-white font-bold mb-4" data-test-id="actors-crew-title">Actors & Crew</h2>
+          <div className="flex overflow-x-auto space-x-4 p-2" data-test-id="actors-list">
+            {movieData?.actors.map((actor: MovieData['actors'][0]) => (
+              <div key={actor.id} className="flex-shrink-0 hover:text-yellow-500 transition duration-300 text-center" data-test-id={`actor-${actor.id}`}>
+                <img 
+                  src={actor.imageUrl || "https://picsum.photos/200"} 
+                  alt={actor.name} 
+                  className="w-24 h-24 rounded-full mx-auto mb-2 object-cover"
+                  data-test-id={`actor-image-${actor.id}`}
+                />
+                <p data-test-id={`actor-name-${actor.id}`}>{actor.name}</p>
+                <p className="text-sm text-gray-400 italic" data-test-id={`actor-role-${actor.id}`}>{actor.role}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </main>
   );
 }

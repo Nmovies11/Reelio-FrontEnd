@@ -38,11 +38,21 @@ const RegisterPage = () => {
     setFormData(prevState => ({ ...prevState, [id]: value }));
   };
 
+  const passwordValidation = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError(null);
     setSuccess(null);
     setLoading(true);
+
+    if (!passwordValidation.test(formData.password)) {
+      setError('Password must be at least 8 characters long, contain a number, a special character, and an uppercase letter.');
+      setLoading(false);
+      return;
+    }
+
 
     try {
       await registerUser(formData.username, formData.email, formData.password);

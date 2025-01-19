@@ -102,12 +102,15 @@ const Navbar = () => {
           >
             Profile
           </a>
-          <a
-            href="/logout"
+            <a
+            onClick={() => {
+              localStorage.removeItem("token");
+              window.location.href = "/";
+            }}
             className="block text-gray-800 px-4 py-2 hover:bg-gray-100"
-          >
+            >
             Logout
-          </a>
+            </a>
         </div>
       )}
     </div>

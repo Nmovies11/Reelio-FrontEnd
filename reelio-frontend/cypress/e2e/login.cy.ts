@@ -1,34 +1,29 @@
-describe('Movies Page', () => {
+describe('The Login Page', () => {
     beforeEach(() => {
-        cy.visit('/movies');
-    });
+        cy.request('POST', '/test/seed/user', { username: 'jane.lane' })
+            .its('body')
+            .as('currentUser')
+    })
 
-    it('should display the movies page title', () => {
-        cy.get('[data-testid="movies-title"]').should('be.visible');
-    });
+    it('sets auth token when logging in via form submission', function () {
+        // destructuring assignment of the this.currentUser object
+        const { username, password } = this.currentUser
 
-    it('should display a list of movies', () => {
-        cy.get('[data-testid="movie-list"]').should('be.visible');
-        cy.get('[data-testid="movie-item"]').should('have.length.greaterThan', 0);
-    });
+        cy.visit('/login')
 
-    it('should navigate to movie details when a movie is clicked', () => {
-        cy.get('[data-testid="movie-item"]').first().click();
-        cy.url().should('include', '/movies/');
-        cy.get('[data-testid="movie-details"]').should('be.visible');
-    });
+        cy.get('input[name=username]').type(username)
 
-    it('should filter movies by genre', () => {
-        cy.get('[data-testid="genre-filter"]').select('Action');
-        cy.get('[data-testid="movie-item"]').each(($el) => {
-            cy.wrap($el).contains('Action');
-        });
-    });
+        // {enter} causes the form to submit
+        cy.get('input[name=password]').type(`${password}{enter}`)
 
-    it('should search for a movie', () => {
-        cy.get('[data-testid="search-input"]').type('Inception');
-        cy.get('[data-testid="search-button"]').click();
-        cy.get('[data-testid="movie-item"]').should('have.length', 1);
-        cy.get('[data-testid="movie-item"]').contains('Inception');
-    });
-});
+        cy.url({ timeout: 10000 }).should('include', '/')
+
+        // our auth token should be present in local storage
+        cy.window().then((window) => {
+            const token = window.localStorage.getItem('token')
+            expect(token).to.exist
+        })
+
+        cy.get('h1').should('contain', 'Profile')
+    })
+})
