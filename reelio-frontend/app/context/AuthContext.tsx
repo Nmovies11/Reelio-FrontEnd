@@ -51,6 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       } catch (error) {
         setError('Failed to fetch user');
+        console.error(error);
       } finally {
         setLoading(false);
       }

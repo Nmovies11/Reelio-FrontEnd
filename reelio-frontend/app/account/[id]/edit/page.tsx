@@ -1,6 +1,5 @@
 "use client"
 import Navigation from "../../../Components/Navigation";
-import { useRouter } from "next/navigation";
 
 export default function EditUserPage({ params }: { params: { id: number } }) {
   
@@ -8,9 +7,10 @@ export default function EditUserPage({ params }: { params: { id: number } }) {
         <>
         <Navigation />
       <div>
+        <h1>Edit User</h1>
         <form>
           <label>
-            Name: 
+            Name: id={params.id}
             <input type="text" name="name" placeholder="Enter new name" />
           </label>
           <br />

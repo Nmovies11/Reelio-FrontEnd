@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Navigation from "../Components/Navigation";
 import ShowCard from "../Components/ShowCard";
 import FilterSidebar from "../Components/FilterSidebar";
@@ -17,13 +17,13 @@ export default function Shows() {
   const [shows, setShows] = useState<ShowDTO[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  const fetchShows = async () => {
+  const fetchShows = useCallback(async () => {
     try {
       const queryParams = new URLSearchParams({
         pageNumber: pageNumber.toString(),
@@ -48,11 +48,11 @@ export default function Shows() {
         setError("An unexpected error occurred.");
       }
     }
-  };
+  }, [pageNumber, pageSize, searchQuery, selectedGenre, API_URL]);
 
   useEffect(() => {
     fetchShows();
-  }, [pageNumber, pageSize, searchQuery, selectedGenre]);
+  }, [pageNumber, pageSize, searchQuery, selectedGenre, fetchShows]);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);

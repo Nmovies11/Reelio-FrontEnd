@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'; 
 
 interface User {
   id: string;  // Assuming the ID is a string (UUID)
@@ -9,7 +8,6 @@ const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {

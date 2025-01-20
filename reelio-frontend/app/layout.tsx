@@ -25,8 +25,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Fetch the API URL from environment variable
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   return (
     <html lang="en">

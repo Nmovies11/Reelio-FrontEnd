@@ -208,15 +208,16 @@ export default function Movie({ params }: { params: { id: number } }) {
       <Navigation />
       <div className="min-h-screen dark:bg-black bg-gray-100 py-10">
         <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-          <div className="flex items-center p-6 bg-purple-600 text-white">
+            <div className="flex items-center p-6 bg-purple-600 text-white">
             <img
               src={"https://picsum.photos/200/300"}
+              alt="User profile picture"
               className="w-24 h-24 rounded-full border-4 border-white"
             />
             <div className="ml-4">
               <h2 className="text-2xl font-bold">{fetchedUser.username}</h2>
             </div>
-          </div>
+            </div>
 
           <div className="p-6">
             <div className="flex space-x-4 border-b-2">

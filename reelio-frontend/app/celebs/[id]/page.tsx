@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Navigation from "../../Components/Navigation";
-import { useAuth } from "@/app/context/AuthContext";
 
 interface ActorData {
   id: number;
@@ -14,12 +13,15 @@ interface ActorData {
 export default function ActorDetail({ params }: { params: { id: number } }) {
   const { id } = params;
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
-  const user = useAuth();
 
   const [actorData, setActorData] = useState<ActorData | null>(null);
   const [backdropImageLoaded, setBackdropImageLoaded] = useState(false);
 
   useEffect(() => {
+    if(backdropImageLoaded)
+    {
+        
+    }
     const fetchActorData = async () => {
       try {
         const response = await fetch(`${API_URL}/actors/${id}`);
@@ -31,7 +33,7 @@ export default function ActorDetail({ params }: { params: { id: number } }) {
     };
 
     fetchActorData();
-  }, [API_URL, id]);
+  }, [API_URL, id, backdropImageLoaded]);
 
   // Preload the actor's image
   useEffect(() => {

@@ -1,5 +1,4 @@
 "use client"
-import Image from "next/image";
 import Navigation from "./Components/Navigation";
 import { getMovies } from "./api/movie/api";
 import { getShows } from "./api/show/api";
@@ -15,19 +14,23 @@ export default function Home() {
   useEffect(() => {
     async function fetchMovies() {
       const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
+  
+      if(error)
+      {
+        console.error("Error fetching data:", error);
+      }
       if (!API_URL) {
         throw new Error("API_URL is not defined");
       }
-
+  
       try {
         const queryParams = new URLSearchParams({
-          pageNumber: "1",  
-          pageSize: "4",   
+          pageNumber: "1",
+          pageSize: "4",
         });
-
+  
         const moviesData = await getMovies(API_URL, queryParams);
-        setMovies(moviesData.items); 
+        setMovies(moviesData.items);
       } catch (error: unknown) {
         if (error instanceof Error) {
           console.error("Error fetching data:", error);
@@ -38,22 +41,22 @@ export default function Home() {
         }
       }
     }
-
+  
     async function fetchActors() {
       const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
+  
       if (!API_URL) {
         throw new Error("API_URL is not defined");
       }
-
+  
       try {
         const queryParams = new URLSearchParams({
-          pageNumber: "1",  
-          pageSize: "4",   
+          pageNumber: "1",
+          pageSize: "4",
         });
-
+  
         const actorsData = await getActors(API_URL, queryParams);
-        setActors(actorsData.items); 
+        setActors(actorsData.items);
       } catch (error: unknown) {
         if (error instanceof Error) {
           console.error("Error fetching data:", error);
@@ -64,22 +67,22 @@ export default function Home() {
         }
       }
     }
-
+  
     async function fetchShows() {
       const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
+  
       if (!API_URL) {
         throw new Error("API_URL is not defined");
       }
-
+  
       try {
         const queryParams = new URLSearchParams({
-          pageNumber: "1",  
-          pageSize: "4",   
+          pageNumber: "1",
+          pageSize: "4",
         });
-
+  
         const showsData = await getShows(API_URL, queryParams);
-         setShows(showsData.items); 
+        setShows(showsData.items);
       } catch (error: unknown) {
         if (error instanceof Error) {
           console.error("Error fetching data:", error);
@@ -90,11 +93,12 @@ export default function Home() {
         }
       }
     }
-
+  
     fetchMovies();
     fetchShows();
     fetchActors();
-  }, []); 
+  }, [error]); 
+  
 
   return (
     <main className="dark:bg-black bg-white h-screen">

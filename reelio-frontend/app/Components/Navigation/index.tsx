@@ -17,13 +17,17 @@ const Navbar = () => {
 
   useEffect(() => {
     console.log("user:", user);
+    if(loading)
+    {
+
+    }
 
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark") {
       setDarkMode(true);
       document.documentElement.classList.add("dark");
     }
-  }, []);
+  }, [user, loading]);
 
   useEffect(() => {
     if (darkMode) {

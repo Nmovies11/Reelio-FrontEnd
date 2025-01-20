@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Navigation from "../Components/Navigation";
 import ActorCard from "../Components/ActorCard"; 
 import FilterSidebar from "../Components/FilterSidebar";
@@ -16,13 +16,13 @@ export default function Actors() {
   const [actors, setActors] = useState<ActorDTO[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  const fetchActors = async () => {
+  const fetchActors = useCallback(async () => {
     try {
       const queryParams = new URLSearchParams({
         pageNumber: pageNumber.toString(),
@@ -47,11 +47,11 @@ export default function Actors() {
         setError("An unexpected error occurred.");
       }
     }
-  };
+  }, [pageNumber, pageSize, searchQuery, selectedGenre, API_URL]);
 
   useEffect(() => {
     fetchActors();
-  }, [pageNumber, pageSize, searchQuery, selectedGenre]);
+  }, [pageNumber, pageSize, searchQuery, selectedGenre, fetchActors]);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);

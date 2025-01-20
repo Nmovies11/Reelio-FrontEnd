@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Navigation from "../Components/Navigation";
 import MovieCard from "../Components/MovieCard";
 import FilterSidebar from "../Components/FilterSidebar";
@@ -18,13 +18,13 @@ export default function Movies() {
   const [movies, setMovies] = useState<MovieDTO[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  const fetchMovies = async () => {
+  const fetchMovies = useCallback(async () => {
     try {
       const queryParams = new URLSearchParams({
         pageNumber: pageNumber.toString(),
@@ -49,11 +49,11 @@ export default function Movies() {
         setError("An unexpected error occurred.");
       }
     }
-  };
+  }, [API_URL, pageNumber, pageSize, searchQuery, selectedGenre]);
 
   useEffect(() => {
     fetchMovies();
-  }, [pageNumber, pageSize, searchQuery, selectedGenre]);
+  }, [pageNumber, pageSize, searchQuery, selectedGenre, fetchMovies]);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);

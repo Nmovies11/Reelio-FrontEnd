@@ -1,5 +1,21 @@
 
-const WatchlistItemCard = ({ item, onEdit, onDelete, expanded, onToggleExpand }: any) => {
+interface WatchlistItem {
+  id: string;
+  title: string;
+  status: string;
+  rating: number;
+  review: string;
+}
+
+interface WatchlistItemCardProps {
+  item: WatchlistItem;
+  onEdit: (item: WatchlistItem) => void;
+  onDelete: (item: WatchlistItem) => void;
+  expanded: boolean;
+  onToggleExpand: () => void;
+}
+
+const WatchlistItemCard = ({ item, onEdit, onDelete, expanded, onToggleExpand }: WatchlistItemCardProps) => {
     return (
       <li
         key={item.id}
